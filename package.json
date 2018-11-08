@@ -1,0 +1,23 @@
+{
+  "name": "crud",
+  "version": "1.0.0",
+  "description": "IPFS Test large files",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --max-old-space-size=4096 index.js"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0"
+  },
+  "author": "Diego Perez Molinero",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bl": "^2.1.2",
+    "file-type": "^10.4.0",
+    "ipfs-api": "^26.1.2",
+    "log-color": "^1.0.0"
+  }
+}
