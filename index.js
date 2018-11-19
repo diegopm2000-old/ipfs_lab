@@ -8,6 +8,7 @@ const ipfsHelper = require('./ipfs.helper');
 const fileType = require('file-type');
 
 const File = require('./file.entity');
+const Filemultipart = require('./filemultipart.entity');
 
 // //////////////////////////////////////////////////////////////////////////////
 // CONSTANTS
@@ -74,6 +75,35 @@ async function saveFileToFileSystem(folderOUT, file) {
   });
 }
 
+function fileToMultipartFile(file, partSize) {
+  log.debug(`${moduleName}:${fileToMultipartFile.name} (IN) --> file.size: ${file.data.length}, file.name: ${file.name}, file.type: ${file.type}, partSize: ${partSize}`);
+
+  const arrayData = [];
+  for (let i = 0; i < file.data.length; i += partSize) {
+    console.log(`partiendo fichero en iteracion: ${i}`);
+    arrayData.push(file.data.slice(i, i + partSize));
+  }
+
+  for (let j = 0; j < arrayData.length; j += 1) {
+    console.log(`tamaño del chunk: ${arrayData[j].length}`);
+  }
+
+  const filemultipartProperties = {
+    arrayData,
+    name: file.name,
+    type: file.type,
+  };
+
+  const filemultipart = new Filemultipart(filemultipartProperties);
+
+  log.debug(`${moduleName}:${fileToMultipartFile.name} (OUT) --> arrayData.length: ${arrayData.length}, name: ${filemultipart.name}, type: ${filemultipart.type}`);
+  return filemultipart;
+}
+
+async function filemultipartToIPFS(filemultipart) {
+  log.debug(`${moduleName}:${filemultipartToIPFS.name} (IN) --> number of parts: ${filemultipart.arrayParts.length}, file.name: ${filemultipart.name}, file.type: ${filemultipart.type}, totalSize: ${filemultipart.getSize()}`);
+}
+
 function start() {
   // 1. Init IPFS Helper
   initIPFS();
@@ -90,14 +120,16 @@ function start() {
     { originFile: 'CleanArchitecture.pdf' },
     { originFile: 'ubuntu-18.04.1-desktop-amd64.iso' },
   ];
-  const index = 7;
+  const index = 0;
   // 2. Prepare origin file and name of destination file
   const originpathFile = `${folderIN}/${testFiles[index].originFile}`;
   // 3. Load File from filesystem
   loadFileFromFileSystem(originpathFile)
-    .then(result => ipfsHelper.saveFile(result))
-    .then(result => ipfsHelper.loadFile(result))
-    .then(result => saveFileToFileSystem(folderOUT, result))
+    .then(result => fileToMultipartFile(result, 1000))
+    .then(result => filemultipartToIPFS(result))
+    // .then(result => ipfsHelper.saveFile(result))
+    // .then(result => ipfsHelper.loadFile(result))
+    // .then(result => saveFileToFileSystem(folderOUT, result))
     .then(() => log.debug('All operations completed with Success'))
     .catch((error) => {
       log.error(`${moduleName}:${start.name} (ERROR) --> ${error.stack}`);
