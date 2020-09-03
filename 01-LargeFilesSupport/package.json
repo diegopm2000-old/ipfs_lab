@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "bl": "^2.1.2",
+    "bl": "^2.2.1",
     "file-type": "^10.4.0",
     "ipfs-api": "^26.1.2",
     "log-color": "^1.0.0"
