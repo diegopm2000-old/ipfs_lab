@@ -14,7 +14,7 @@
   "author": "Diego Perez Molinero",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bl": "^2.1.2",
     "file-type": "^10.4.0",
     "ipfs-api": "^26.1.2",
