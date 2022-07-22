@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bl": "^2.1.2",
-    "file-type": "^10.4.0",
+    "file-type": "^16.5.4",
     "ipfs-api": "^26.1.2",
     "log-color": "^1.0.0"
   }
